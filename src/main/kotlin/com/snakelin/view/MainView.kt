@@ -1,12 +1,13 @@
-package com.example.view
+package com.snakelin.view
 
-import com.example.Styles
 import tornadofx.*
 
 class MainView : View("Hello TornadoFX") {
     override val root = hbox {
-        label(title) {
+        button("Press me!")
+        label("Waiting...")
+        /*label(title) {
             addClass(Styles.heading)
-        }
+        }*/
     }
 }
