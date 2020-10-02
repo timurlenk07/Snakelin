@@ -18,3 +18,7 @@ class SnakelinApp: App(HomeView::class, Styles::class) {
 
     override fun shouldShowPrimaryStage() = false
 }
+
+fun main() {
+    launch<SnakelinApp>()
+}

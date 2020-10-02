@@ -3,13 +3,17 @@ package com.snakelin.view
 import com.snakelin.Styles
 import javafx.geometry.Pos
 import tornadofx.*
+import java.util.*
 
-class HomeView : View("Snakelin") {
+class HomeView : View("Snakelin Home") {
     override val root = borderpane {
         center = vbox(20, Pos.CENTER) {
             label("Snakelin")
             button("Play") {
-                action { println("$text pressed!") }
+                action {
+                    println("$text pressed!")
+                    this@HomeView.replaceWith(GameView::class)
+                }
             }
             hbox(20, Pos.CENTER) {
                 button("High scores") {
@@ -32,10 +36,5 @@ class HomeView : View("Snakelin") {
                 addClass(Styles.smallLabel)
             }
         }
-    }
-
-    init {
-        primaryStage.minHeight = 360.0
-        primaryStage.minWidth = 480.0
     }
 }
