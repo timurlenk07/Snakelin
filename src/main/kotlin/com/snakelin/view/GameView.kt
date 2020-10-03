@@ -27,6 +27,7 @@ class GameView : View("Snakelin") {
     }
 
     init {
+        SnakelinModel.currentGame.drawOnCanvas(gameCanvas)
         gameThread = Thread {
             // TODO: frquently call drawing on canvas
             while (true) {

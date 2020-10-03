@@ -23,6 +23,7 @@ class IntroView : View("Snakelin...") {
                 // Set saved resolution
                 primaryStage.minWidth = SnakelinModel.resolution[0]
                 primaryStage.minHeight = SnakelinModel.resolution[1]
+                println("Resolution set to ${SnakelinModel.resolution[0]}")
             }
             if (loadTime < 1500) {
                 Thread.sleep(1500 - loadTime)
@@ -32,9 +33,6 @@ class IntroView : View("Snakelin...") {
                 close()
                 primaryStage.show()
             }
-            /*println("Changing to HomeView...")
-            this@IntroView.replaceWith(HomeView::class)
-            println("Changed to HomeView.")*/
         }
     }
 }

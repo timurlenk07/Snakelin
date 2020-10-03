@@ -3,7 +3,7 @@ package com.snakelin.view
 import javafx.geometry.Pos
 import tornadofx.*
 
-class PauseView : View("My View") {
+class PauseView : View("Snakelin (Paused)") {
     override val root = vbox(10, alignment = Pos.CENTER) {
         button("Continue") {
             action {
