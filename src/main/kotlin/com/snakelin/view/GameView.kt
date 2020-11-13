@@ -2,7 +2,9 @@ package com.snakelin.view
 
 import com.snakelin.game.*
 import com.snakelin.model.SnakelinModel
+import com.snakelin.model.loadGame
 import com.snakelin.model.resetGame
+import com.snakelin.model.saveGame
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
@@ -57,6 +59,7 @@ class GameView : View("Snakelin") {
     }
 
     override fun onDock() {
+        SnakelinModel.loadGame()
         if (SnakelinModel.currentGame.status.isOneOf(PLAY_STATUS.GAME_OVER, PLAY_STATUS.WIN)) {
             SnakelinModel.resetGame()
             userText.text = "Press Space to start!"
@@ -66,7 +69,7 @@ class GameView : View("Snakelin") {
 
     override fun onUndock() {
         if (SnakelinModel.currentGame.status.isOneOf(PLAY_STATUS.PLAYING, PLAY_STATUS.PAUSED)) {
-            Unit // Save  game state
+            SnakelinModel.saveGame()
             println("We want to save the game state! DO IT!")
         }
     }

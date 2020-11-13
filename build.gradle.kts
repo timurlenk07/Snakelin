@@ -1,7 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.0"
+    kotlin("jvm") version "1.4.10"
+    kotlin("plugin.serialization") version "1.4.10"
     application
     id("org.openjfx.javafxplugin") version "0.0.8"
 }
@@ -20,7 +21,7 @@ repositories {
 }
 
 application {
-    mainClassName = "com.example.MainKt"
+    mainClassName = "com.snakelin.SnakelinApp"
 }
 
 dependencies {
@@ -28,6 +29,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("no.tornado:tornadofx:$tornadofx_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     testImplementation(kotlin("test-junit"))
 }
 

@@ -1,5 +1,8 @@
 package com.snakelin.game
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Point(val x: Int, val y: Int)
 
 operator fun Point.plus(p: Point) = Point(x + p.x, y + p.y)
