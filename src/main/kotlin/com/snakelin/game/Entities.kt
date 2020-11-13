@@ -1,33 +1,31 @@
 package com.snakelin.game
 
-import javafx.geometry.Point2D
-import javafx.scene.canvas.Canvas
-import javafx.scene.paint.Color
+data class Point(val x: Int, val y: Int)
 
-sealed class Entity(var pos: Point2D)
+operator fun Point.plus(p: Point) = Point(x + p.x, y + p.y)
+operator fun Point.minus(p: Point) = Point(x - p.x, y - p.y)
+
+sealed class Entity(var pos: Point)
 
 enum class Direction {
     NORTH, SOUTH, WEST, EAST
 }
 
-class Snake(pos: Point2D) : Entity(pos), Consumer {
-
-    var speed = Direction.NORTH
-    val segments = mutableListOf(pos, pos, pos)
+class Snake(head: Point, vararg body: Point) : Entity(head), Consumer {
+    var head by this::pos
+    val body = body.toMutableList()
+    var speed = Direction.WEST
 
     override fun consume(that: Consumable) {
         when (that) {
             is Apple -> {
-                segments.add(segments.last())
+                body.add(body.last())
             }
             else -> println("Consumeable of class $")
         }
     }
 
-    fun getHealth() = segments.size
-    fun getHead() = segments[0]
-    fun getBody() = segments.subList(1, segments.size)
+    fun getHealth() = body.size + 1
 }
 
-// Note: pos for circular objects means centerpoint
-class Apple(pos: Point2D) : Entity(pos), Consumable
+class Apple(pos: Point) : Entity(pos), Consumable

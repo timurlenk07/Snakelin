@@ -3,8 +3,6 @@ package com.snakelin.game
 import com.snakelin.game.Direction.*
 import javafx.scene.canvas.Canvas
 import javafx.scene.paint.Color
-import tornadofx.*
-import kotlin.random.Random
 
 enum class PLAY_STATUS {
     NOT_STARTED, PLAYING, GAME_OVER, WIN, PAUSED
@@ -12,38 +10,57 @@ enum class PLAY_STATUS {
 
 class GameEngine {
 
-    val mapSize = 8
-    val player = Snake(Point2D(7.0))
-    val apple = Apple(Point2D(0.0))
+    val mapSize = 3
+    val player = Snake(Point(2, 2), Point(2, 1), Point(2, 0))
+    val apple = Apple(Point(1, 1))
     var status = PLAY_STATUS.NOT_STARTED
 
     fun step() : PLAY_STATUS {
-        // Move last segment of snake in front
-        val oldHead = player.getHead()
-        val newHead = when (player.speed) {
-            NORTH -> oldHead.subtract(0.0, 1.0)
-            SOUTH -> oldHead.add(0.0, 1.0)
-            EAST -> oldHead.add(1.0, 0.0)
-            WEST -> oldHead.subtract(1.0, 0.0)
-        }
-        player.segments.add(0, newHead)
-        player.segments.removeLast()
+        // Move head
+        val oldHead = player.head
+        player.head += player.speed
 
-        // Check if snake head is out of bounds (GAME OVER)
-        if (player.getHead().x < 0 || player.getHead().y < 0 || player.getHead().x >= mapSize || player.getHead().y >= mapSize) {
+        // Check if head overlaps an apple, if it does, add new segment, generate apple
+        val consumed = player.head == apple.pos
+        if (consumed) {
+            player.consume(apple)
+        }
+
+        // Move last segment of snake to front
+        player.body.add(0, oldHead)
+        player.body.removeLast()
+
+        if (consumed) {
+            // Win: if snake covers whole map
+            if (player.getHealth() == mapSize * mapSize) {
+                status = PLAY_STATUS.WIN
+                return status
+            }
+
+            apple.pos = getRandomPos()
+        }
+
+        // Lose: if snake head is out of bounds
+        // Lose: if snake head overlaps body
+        val outOfBounds = player.head.x < 0 || player.head.y < 0 || player.head.x >= mapSize || player.head.y >= mapSize
+        val eatsItself = player.body.contains(player.head)
+        if (outOfBounds || eatsItself) {
             status = PLAY_STATUS.GAME_OVER
             return status
         }
 
-        // Check if head overlaps an apple, if it does, add new segment, generate apple
-        if (player.getHead().equals(apple.pos)) {
-            player.consume(apple)
+        return status
+    }
+
+    private fun getRandomPos() : Point {
+        while (true) {
             val xnew = (0 until mapSize).random()
             val ynew = (0 until mapSize).random()
-            apple.pos = Point2D(0.0).add(xnew.toDouble(), ynew.toDouble())
+            val newPoint = Point(xnew, ynew)
+            if (player.head != newPoint && !player.body.contains(newPoint)) {
+                return newPoint
+            }
         }
-
-        return status
     }
 }
 
@@ -55,15 +72,31 @@ fun GameEngine.drawOnCanvas(c: Canvas) {
     gc.fill = Color.AQUAMARINE
     gc.fillRect(0.0, 0.0, c.width, c.height)
 
-    // Player
-    gc.fill = Color.BLUE
-    gc.fillOval(player.getHead().x * GRID_SIZE_X, player.getHead().y * GRID_SIZE_Y, GRID_SIZE_X, GRID_SIZE_Y)
-    gc.fill = Color.GREEN
-    for (segment in player.getBody()) {
-        gc.fillOval(segment.x * GRID_SIZE_X, segment.y * GRID_SIZE_Y, GRID_SIZE_X, GRID_SIZE_Y)
-    }
-
     // Apple
     gc.fill = Color.RED
     gc.fillOval(apple.pos.x * GRID_SIZE_X, apple.pos.y * GRID_SIZE_Y, GRID_SIZE_X, GRID_SIZE_Y)
+
+    // Player
+    gc.fill = Color.GREEN
+    for (segment in player.body) {
+        gc.fillOval(segment.x * GRID_SIZE_X, segment.y * GRID_SIZE_Y, GRID_SIZE_X, GRID_SIZE_Y)
+    }
+    gc.fill = Color.BLUE
+    gc.fillOval(player.head.x * GRID_SIZE_X, player.head.y * GRID_SIZE_Y, GRID_SIZE_X, GRID_SIZE_Y)
+}
+
+fun PLAY_STATUS.isOneOf(vararg dirs: PLAY_STATUS) : Boolean {
+    if (dirs.contains(this)) {
+        return true
+    }
+    return false
+}
+
+operator fun Point.plus(dir: Direction) : Point {
+    return when (dir) {
+        NORTH -> this - Point(0, 1)
+        SOUTH -> this + Point(0, 1)
+        EAST -> this + Point(1, 0)
+        WEST -> this - Point(1, 0)
+    }
 }
