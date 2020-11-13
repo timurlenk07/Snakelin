@@ -25,8 +25,8 @@ class IntroView : View("Snakelin...") {
                 primaryStage.minHeight = SnakelinModel.resolution[1]
                 println("Resolution set to ${SnakelinModel.resolution[0]}")
             }
-            if (loadTime < 1500) {
-                Thread.sleep(1500 - loadTime)
+            if (loadTime < 500) {
+                Thread.sleep(500 - loadTime)
             }
 
             runLater {

@@ -16,6 +16,7 @@ val tornadofx_version: String by rootProject
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 application {
@@ -26,6 +27,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("no.tornado:tornadofx:$tornadofx_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
     testImplementation(kotlin("test-junit"))
 }
 

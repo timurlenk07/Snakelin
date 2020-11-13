@@ -1,6 +1,8 @@
 package com.snakelin.view
 
 import com.snakelin.Styles
+import com.snakelin.model.SnakelinModel
+import com.snakelin.model.resetGame
 import javafx.geometry.Pos
 import tornadofx.*
 import java.util.*
@@ -11,7 +13,6 @@ class HomeView : View("Snakelin Home") {
             label("Snakelin")
             button("Play") {
                 action {
-                    println("$text pressed!")
                     this@HomeView.replaceWith(GameView::class)
                 }
             }
