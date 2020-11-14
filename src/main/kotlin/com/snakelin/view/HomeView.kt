@@ -18,7 +18,10 @@ class HomeView : View("Snakelin Home") {
             }
             hbox(20, Pos.CENTER) {
                 button("High scores") {
-                    action { println("$text pressed!") }
+                    action {
+                        println("Number of high scores: ${SnakelinModel.highScores.size}")
+                        this@HomeView.replaceWith(HighScoresView::class)
+                    }
                 }
                 button("Settings") {
                     action { println("$text pressed!") }

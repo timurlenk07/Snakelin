@@ -1,10 +1,7 @@
 package com.snakelin.view
 
 import com.snakelin.game.*
-import com.snakelin.model.SnakelinModel
-import com.snakelin.model.loadGame
-import com.snakelin.model.resetGame
-import com.snakelin.model.saveGame
+import com.snakelin.model.*
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
@@ -36,8 +33,8 @@ class GameView : View("Snakelin") {
                                 this@GameView.replaceWith(HomeView::class)
                             }
                             else -> {
-                                SnakelinModel.currentGame.status = PLAY_STATUS.PAUSED
                                 pause()
+                                SnakelinModel.currentGame.status = PLAY_STATUS.PAUSED
                                 this@GameView.replaceWith(PauseView::class)
                             }
                         }
@@ -92,9 +89,13 @@ class GameView : View("Snakelin") {
                     }
                     PLAY_STATUS.WIN -> {
                         userText.text = "You won!"
-                        userText.isVisible = true
                     }
                     else -> Unit
+                }
+                if (SnakelinModel.currentGame.status.isOneOf(PLAY_STATUS.GAME_OVER, PLAY_STATUS.WIN)) {
+                    userText.isVisible = true
+                    SnakelinModel.highScores.add(Score(SnakelinModel.currentGame.player.getHealth()))
+                    SnakelinModel.saveHighScores() // TODO: find a better place for this
                 }
             }
         }
