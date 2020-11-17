@@ -14,6 +14,10 @@ class GameEngine {
     val player = Snake(Point(2, 2), Point(2, 1), Point(2, 0))
     val apple = Apple(Point(1, 1))
     var status = PLAY_STATUS.NOT_STARTED
+    val score: Int
+        get() {
+            return player.getHealth()
+        }
 
     fun step() : PLAY_STATUS {
         // Move head

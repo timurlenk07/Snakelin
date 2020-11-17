@@ -2,50 +2,62 @@ package com.snakelin.view
 
 import com.snakelin.game.*
 import com.snakelin.model.*
+import javafx.geometry.Insets
+import javafx.scene.Parent
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.text.Text
+import javafx.stage.Modality
 import tornadofx.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.javafx.JavaFx
 
 class GameView : View("Snakelin") {
     private var gameLoop: Job? = null
-    private val gameCanvas = Canvas(400.0, 400.0)
+    private val gameCanvas = Canvas(360.0, 360.0)
     private val userText: Text
+    private val scoreText: Text
 
-    override val root = stackpane {
-        /*gameCanvas.width = this.width
-        gameCanvas.height = this.height*/
-        this += gameCanvas
-
-        text("Press Space to start!") {
-            id = "gameMessage"
+    override val root = borderpane {
+        top = hbox {
+            paddingAll = 20.0
+            text("Score: ")
+            text(SnakelinModel.currentGame.score.toString()) {
+                id = "score"
+            }
         }
+        center = stackpane {
+            add(gameCanvas)
 
-        keyboard {
-            addEventHandler(KeyEvent.KEY_PRESSED) {
-                when (it.code) {
-                    KeyCode.ESCAPE -> {
-                        when (SnakelinModel.currentGame.status)  {
-                            PLAY_STATUS.GAME_OVER, PLAY_STATUS.WIN -> {
-                                pause()
-                                this@GameView.replaceWith(HomeView::class)
+            text("Press Space to start!") {
+                id = "gameMessage"
+            }
+
+            keyboard {
+                addEventHandler(KeyEvent.KEY_PRESSED) {
+                    when (it.code) {
+                        KeyCode.ESCAPE -> {
+                            when (SnakelinModel.currentGame.status) {
+                                PLAY_STATUS.GAME_OVER, PLAY_STATUS.WIN -> {
+                                    pause()
+                                    this@GameView.replaceWith(HomeView::class)
+                                }
+                                else -> {
+                                    pause()
+                                    SnakelinModel.currentGame.status = PLAY_STATUS.PAUSED
+                                    this@GameView.replaceWith(PauseView::class)
+                                }
                             }
-                            else -> {
-                                pause()
-                                SnakelinModel.currentGame.status = PLAY_STATUS.PAUSED
-                                this@GameView.replaceWith(PauseView::class)
-                            }
+                            println("Status is " + SnakelinModel.currentGame.status)
                         }
-                        println("Status is " + SnakelinModel.currentGame.status)
+                        KeyCode.SPACE -> start()
+                        KeyCode.DOWN -> SnakelinModel.currentGame.player.speed = Direction.SOUTH
+                        KeyCode.UP -> SnakelinModel.currentGame.player.speed = Direction.NORTH
+                        KeyCode.LEFT -> SnakelinModel.currentGame.player.speed = Direction.WEST
+                        KeyCode.RIGHT -> SnakelinModel.currentGame.player.speed = Direction.EAST
+                        else -> Unit
                     }
-                    KeyCode.SPACE -> start()
-                    KeyCode.DOWN -> SnakelinModel.currentGame.player.speed = Direction.SOUTH
-                    KeyCode.UP -> SnakelinModel.currentGame.player.speed = Direction.NORTH
-                    KeyCode.LEFT -> SnakelinModel.currentGame.player.speed = Direction.WEST
-                    KeyCode.RIGHT -> SnakelinModel.currentGame.player.speed = Direction.EAST
-                    else -> Unit
                 }
             }
         }
@@ -53,6 +65,7 @@ class GameView : View("Snakelin") {
 
     init {
         userText = root.lookup("#gameMessage") as Text
+        scoreText = root.lookup("#score") as Text
     }
 
     override fun onDock() {
@@ -82,6 +95,7 @@ class GameView : View("Snakelin") {
                 delay(400)
                 val newState = SnakelinModel.currentGame.step()
                 SnakelinModel.currentGame.drawOnCanvas(gameCanvas)
+                scoreText.text = SnakelinModel.currentGame.score.toString()
                 when (newState) {
                     PLAY_STATUS.GAME_OVER -> {
                         userText.text = "Game Over!"
@@ -94,7 +108,13 @@ class GameView : View("Snakelin") {
                 }
                 if (SnakelinModel.currentGame.status.isOneOf(PLAY_STATUS.GAME_OVER, PLAY_STATUS.WIN)) {
                     userText.isVisible = true
-                    SnakelinModel.highScores.add(Score(SnakelinModel.currentGame.player.getHealth()))
+                    var name = ""
+                    withContext(Dispatchers.JavaFx) {
+                        val popup = AskForNamePopup()
+                        popup.openWindow(modality = Modality.WINDOW_MODAL, block = true)
+                        name = popup.name
+                    }
+                    SnakelinModel.highScores.add(Score(SnakelinModel.currentGame.score, name))
                     SnakelinModel.saveHighScores() // TODO: find a better place for this
                 }
             }
@@ -108,5 +128,19 @@ class GameView : View("Snakelin") {
         }
         userText.isVisible = true
         gameLoop = null
+    }
+}
+
+class AskForNamePopup : View("Enter your name") {
+    var name = ""
+    override val root = vbox {
+        text("Enter your name: ")
+        textfield {
+            action {
+                name = this.text
+                this@AskForNamePopup.close()
+            }
+        }
+        paddingAll = 15.0
     }
 }
