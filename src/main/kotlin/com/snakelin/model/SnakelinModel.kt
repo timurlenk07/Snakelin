@@ -2,6 +2,7 @@ package com.snakelin.model
 
 import com.snakelin.game.GameEngine
 import java.util.*
+import tornadofx.*
 
 object SnakelinModel {
     val options = SnakelinOptions()
@@ -11,7 +12,6 @@ object SnakelinModel {
 
     init {
         // TODO: load options
-        loadHighScores()
     }
 }
 

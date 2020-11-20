@@ -5,3 +5,7 @@
 .DS_Store
 /build
 /captures
+
+# App specific
+highscores.json
+checkpoint.json
