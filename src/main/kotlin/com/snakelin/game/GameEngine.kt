@@ -7,8 +7,8 @@ import javafx.scene.paint.Color
 object GameEngine {
     val state: GameState get() = SnakelinModel.currentGame
 
-    fun step(): PLAY_STATUS = state.step()
-    private fun GameState.step(): PLAY_STATUS {
+    fun step(): PlayStatus = state.step()
+    private fun GameState.step(): PlayStatus {
         // Move head
         val oldHead = player.head
         player.head += player.speed
@@ -26,7 +26,7 @@ object GameEngine {
         if (consumed) {
             // Win: if snake covers whole map
             if (player.getHealth() == mapSize * mapSize) {
-                status = PLAY_STATUS.WIN
+                status = PlayStatus.WIN
                 return status
             }
 
@@ -38,7 +38,7 @@ object GameEngine {
         val outOfBounds = player.head.x < 0 || player.head.y < 0 || player.head.x >= mapSize || player.head.y >= mapSize
         val eatsItself = player.body.contains(player.head)
         if (outOfBounds || eatsItself) {
-            status = PLAY_STATUS.GAME_OVER
+            status = PlayStatus.GAME_OVER
             return status
         }
 

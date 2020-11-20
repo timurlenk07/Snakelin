@@ -1,12 +1,11 @@
 package com.snakelin.view
 
 import com.snakelin.controller.GameController
-import com.snakelin.game.PLAY_STATUS
 import com.snakelin.game.drawOnCanvas
-import com.snakelin.game.isOneOf
+import com.snakelin.game.isFinished
+import com.snakelin.game.isStarted
 import com.snakelin.game.score
 import com.snakelin.model.SnakelinModel
-import com.snakelin.model.loadGame
 import com.snakelin.model.resetGame
 import com.snakelin.model.saveGame
 import javafx.scene.canvas.Canvas
@@ -37,7 +36,6 @@ class GameView : View("Snakelin") {
             keyboard {
                 addEventHandler(KeyEvent.KEY_PRESSED) {
                     controller.handleKeyEvent(it)
-                    println("Key event added!")
                 }
             }
         }
@@ -47,8 +45,7 @@ class GameView : View("Snakelin") {
     val scoreText = root.lookup("#score") as Text
 
     override fun onDock() {
-        SnakelinModel.loadGame()
-        if (SnakelinModel.currentGame.status.isOneOf(PLAY_STATUS.GAME_OVER, PLAY_STATUS.WIN)) {
+        if (SnakelinModel.currentGame.status.isFinished()) {
             SnakelinModel.resetGame()
             userText.text = "Press Space to start!"
         }
@@ -56,9 +53,8 @@ class GameView : View("Snakelin") {
     }
 
     override fun onUndock() {
-        if (SnakelinModel.currentGame.status.isOneOf(PLAY_STATUS.PLAYING, PLAY_STATUS.PAUSED)) {
+        if (SnakelinModel.currentGame.status.isStarted() && !SnakelinModel.currentGame.status.isFinished()) {
             SnakelinModel.saveGame()
-            println("We want to save the game state! DO IT!")
         }
     }
 }

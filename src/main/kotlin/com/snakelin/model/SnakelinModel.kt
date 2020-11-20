@@ -19,7 +19,7 @@ fun SnakelinModel.resetGame(): GameState {
             3,
             Snake(Point(2, 2), arrayListOf(Point(2, 1), Point(2, 0))),
             Apple(Point(1, 1)),
-            PLAY_STATUS.NOT_STARTED,
+            PlayStatus.NOT_STARTED,
     )
     return currentGame
 }

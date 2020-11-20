@@ -1,6 +1,7 @@
 package com.snakelin
 
 import com.snakelin.model.SnakelinModel
+import com.snakelin.model.loadGame
 import com.snakelin.model.loadHighScores
 import com.snakelin.view.HomeView
 import javafx.stage.Stage
@@ -12,6 +13,7 @@ class SnakelinApp : App(HomeView::class, Styles::class) {
         super.start(stage)
 
         SnakelinModel.loadHighScores()
+        SnakelinModel.loadGame()
         // TODO: Load options
 
         // Set saved resolution

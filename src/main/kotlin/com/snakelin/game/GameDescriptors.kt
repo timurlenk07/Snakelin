@@ -14,16 +14,16 @@ enum class Direction {
 }
 
 
-enum class PLAY_STATUS {
+enum class PlayStatus {
     NOT_STARTED, PLAYING, GAME_OVER, WIN, PAUSED
 }
 
-fun PLAY_STATUS.isOneOf(vararg dirs: PLAY_STATUS): Boolean {
-    if (dirs.contains(this)) {
-        return true
-    }
-    return false
+fun PlayStatus.isOneOf(vararg dirs: PlayStatus): Boolean {
+    return dirs.contains(this)
 }
+
+fun PlayStatus.isFinished(): Boolean = this.isOneOf(PlayStatus.GAME_OVER, PlayStatus.WIN)
+fun PlayStatus.isStarted(): Boolean = this != PlayStatus.NOT_STARTED
 
 operator fun Point.plus(dir: Direction): Point {
     return when (dir) {
