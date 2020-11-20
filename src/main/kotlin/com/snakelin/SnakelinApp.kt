@@ -6,6 +6,7 @@ import com.snakelin.view.HomeView
 import javafx.stage.Stage
 import tornadofx.*
 
+
 class SnakelinApp : App(HomeView::class, Styles::class) {
     override fun start(stage: Stage) {
         super.start(stage)

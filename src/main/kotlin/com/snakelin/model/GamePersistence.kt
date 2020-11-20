@@ -1,6 +1,7 @@
 package com.snakelin.model
 
-import com.snakelin.game.GameEngine
+import com.snakelin.controller.GameController
+import com.snakelin.game.GameState
 import com.snakelin.game.Point
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -17,7 +18,7 @@ data class SavedGameState(
     val mapSize: Int
 )
 
-fun GameEngine.fromSavedState(savedState: SavedGameState) : Boolean {
+/*fun GameController.fromSavedState(savedState: SavedGameState) : Boolean {
     if (this.mapSize != savedState.mapSize) {
         return false
     }
@@ -28,17 +29,17 @@ fun GameEngine.fromSavedState(savedState: SavedGameState) : Boolean {
     return true
 }
 
-fun GameEngine.toSavedState() : SavedGameState {
+fun GameController.toSavedState() : SavedGameState {
     return SavedGameState(
         player.head,
         player.body,
         apple.pos,
         mapSize
     )
-}
+}*/
 
 fun SnakelinModel.saveGame() {
-    val state = currentGame.toSavedState()
+    val state = currentGame//.toSavedState()
     val stateString = Json.encodeToString(state)
     File("checkpoint.json").writeText(stateString)
 }
@@ -47,8 +48,8 @@ fun SnakelinModel.loadGame() {
     val ckptFile = File("checkpoint.json")
     if (ckptFile.exists()) {
         val stateString = ckptFile.readText()
-        val state = Json.decodeFromString<SavedGameState>(stateString)
-        currentGame.fromSavedState(state)
+        val state = Json.decodeFromString<GameState>(stateString)
+        currentGame = state//.fromSavedState(state)
     } else {
         println("No checkpoint found.")
     }

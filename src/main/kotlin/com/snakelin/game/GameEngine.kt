@@ -1,25 +1,14 @@
 package com.snakelin.game
 
-import com.snakelin.game.Direction.*
+import com.snakelin.model.SnakelinModel
 import javafx.scene.canvas.Canvas
 import javafx.scene.paint.Color
 
-enum class PLAY_STATUS {
-    NOT_STARTED, PLAYING, GAME_OVER, WIN, PAUSED
-}
+object GameEngine {
+    val state: GameState get() = SnakelinModel.currentGame
 
-class GameEngine {
-
-    val mapSize = 3
-    val player = Snake(Point(2, 2), Point(2, 1), Point(2, 0))
-    val apple = Apple(Point(1, 1))
-    var status = PLAY_STATUS.NOT_STARTED
-    val score: Int
-        get() {
-            return player.getHealth()
-        }
-
-    fun step() : PLAY_STATUS {
+    fun step(): PLAY_STATUS = state.step()
+    private fun GameState.step(): PLAY_STATUS {
         // Move head
         val oldHead = player.head
         player.head += player.speed
@@ -56,19 +45,19 @@ class GameEngine {
         return status
     }
 
-    private fun getRandomPos() : Point {
+    private fun getRandomPos(): Point {
         while (true) {
-            val xnew = (0 until mapSize).random()
-            val ynew = (0 until mapSize).random()
+            val xnew = (0 until state.mapSize).random()
+            val ynew = (0 until state.mapSize).random()
             val newPoint = Point(xnew, ynew)
-            if (player.head != newPoint && !player.body.contains(newPoint)) {
+            if (state.player.head != newPoint && !state.player.body.contains(newPoint)) {
                 return newPoint
             }
         }
     }
 }
 
-fun GameEngine.drawOnCanvas(c: Canvas) {
+fun GameState.drawOnCanvas(c: Canvas) {
     val GRID_SIZE_X = c.width / mapSize
     val GRID_SIZE_Y = c.height / mapSize
 
@@ -87,20 +76,4 @@ fun GameEngine.drawOnCanvas(c: Canvas) {
     }
     gc.fill = Color.BLUE
     gc.fillOval(player.head.x * GRID_SIZE_X, player.head.y * GRID_SIZE_Y, GRID_SIZE_X, GRID_SIZE_Y)
-}
-
-fun PLAY_STATUS.isOneOf(vararg dirs: PLAY_STATUS) : Boolean {
-    if (dirs.contains(this)) {
-        return true
-    }
-    return false
-}
-
-operator fun Point.plus(dir: Direction) : Point {
-    return when (dir) {
-        NORTH -> this - Point(0, 1)
-        SOUTH -> this + Point(0, 1)
-        EAST -> this + Point(1, 0)
-        WEST -> this - Point(1, 0)
-    }
 }
