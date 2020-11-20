@@ -2,8 +2,7 @@ package com.snakelin.view
 
 import com.snakelin.game.*
 import com.snakelin.model.*
-import javafx.geometry.Insets
-import javafx.scene.Parent
+import com.snakelin.view.popup.AskForNamePopup
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
@@ -128,19 +127,5 @@ class GameView : View("Snakelin") {
         }
         userText.isVisible = true
         gameLoop = null
-    }
-}
-
-class AskForNamePopup : View("Enter your name") {
-    var name = ""
-    override val root = vbox {
-        text("Enter your name: ")
-        textfield {
-            action {
-                name = this.text
-                this@AskForNamePopup.close()
-            }
-        }
-        paddingAll = 15.0
     }
 }
