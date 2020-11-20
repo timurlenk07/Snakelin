@@ -18,8 +18,6 @@ class GameView : View("Snakelin") {
     private val controller: GameController by inject()
 
     val gameCanvas = Canvas(360.0, 360.0)
-    val userText: Text
-    val scoreText: Text
 
     override val root = borderpane {
         top = hbox {
@@ -45,10 +43,8 @@ class GameView : View("Snakelin") {
         }
     }
 
-    init {
-        userText = root.lookup("#gameMessage") as Text
-        scoreText = root.lookup("#score") as Text
-    }
+    val userText = root.lookup("#gameMessage") as Text
+    val scoreText = root.lookup("#score") as Text
 
     override fun onDock() {
         SnakelinModel.loadGame()
