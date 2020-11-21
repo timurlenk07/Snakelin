@@ -66,7 +66,7 @@ class GameController : Controller() {
                 if (SnakelinModel.currentGame.status.isFinished()) {
                     view.userText.isVisible = true
                     val name = withContext(Dispatchers.JavaFx) {
-                        val popup = AskForNamePopup()
+                        val popup = AskForNamePopup(3)
                         popup.openWindow(modality = Modality.WINDOW_MODAL, block = true)
                         popup.name
                     }
@@ -77,6 +77,7 @@ class GameController : Controller() {
                     }
                 }
             }
+            gameLoop = null
         }
     }
 
