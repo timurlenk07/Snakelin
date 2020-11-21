@@ -72,6 +72,9 @@ class GameController : Controller() {
                     }
                     SnakelinModel.highScores.add(Score(SnakelinModel.currentGame.score, name))
                     SnakelinModel.saveHighScores() // TODO: find a better place for this
+                    withContext(Dispatchers.JavaFx) {
+                        view.replaceWith(HomeView::class)
+                    }
                 }
             }
         }

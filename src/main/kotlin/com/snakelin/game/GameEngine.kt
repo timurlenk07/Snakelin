@@ -58,8 +58,8 @@ object GameEngine {
 }
 
 fun GameState.drawOnCanvas(c: Canvas) {
-    val GRID_SIZE_X = c.width / mapSize
-    val GRID_SIZE_Y = c.height / mapSize
+    val gridSizeX = c.width / mapSize
+    val gridSizeY = c.height / mapSize
 
     val gc = c.graphicsContext2D
     gc.fill = Color.AQUAMARINE
@@ -67,13 +67,13 @@ fun GameState.drawOnCanvas(c: Canvas) {
 
     // Apple
     gc.fill = Color.RED
-    gc.fillOval(apple.pos.x * GRID_SIZE_X, apple.pos.y * GRID_SIZE_Y, GRID_SIZE_X, GRID_SIZE_Y)
+    gc.fillOval(apple.pos.x * gridSizeX, apple.pos.y * gridSizeY, gridSizeX, gridSizeY)
 
     // Player
     gc.fill = Color.GREEN
     for (segment in player.body) {
-        gc.fillOval(segment.x * GRID_SIZE_X, segment.y * GRID_SIZE_Y, GRID_SIZE_X, GRID_SIZE_Y)
+        gc.fillOval(segment.x * gridSizeX, segment.y * gridSizeY, gridSizeX, gridSizeY)
     }
     gc.fill = Color.BLUE
-    gc.fillOval(player.head.x * GRID_SIZE_X, player.head.y * GRID_SIZE_Y, GRID_SIZE_X, GRID_SIZE_Y)
+    gc.fillOval(player.head.x * gridSizeX, player.head.y * gridSizeY, gridSizeX, gridSizeY)
 }
