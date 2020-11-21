@@ -50,7 +50,7 @@ class GameController : Controller() {
 
         gameLoop = GlobalScope.launch {
             while (SnakelinModel.currentGame.status == PlayStatus.PLAYING) {
-                delay(400)
+                delay(SnakelinModel.options.gameSpeed.toLong())
                 val newState = GameEngine.step()
                 SnakelinModel.currentGame.drawOnCanvas(view.gameCanvas)
                 view.scoreText.text = SnakelinModel.currentGame.score.toString()

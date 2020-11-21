@@ -20,7 +20,7 @@ class HomeView : View("Snakelin Home") {
                     }
                 }
                 button("Settings") {
-                    action { println("$text pressed!") }
+                    action { this@HomeView.replaceWith(OptionsView::class) }
                 }
             }
         }

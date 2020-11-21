@@ -10,15 +10,20 @@ import java.io.File
 
 object SnakelinModel {
     var options = SnakelinOptions()
+        set(value) {
+            field = value
+            resetGame()
+        }
     val highScores = mutableListOf<Score>()
     val resolution = doubleArrayOf(640.0, 480.0)
     var currentGame: GameState = resetGame()
 }
 
 fun SnakelinModel.resetGame(): GameState {
+    val cp = options.mapSize / 2
     currentGame = GameState(
-            3,
-            Snake(Point(3 / 2, 3 / 2), arrayListOf(Point(3 / 2 + 1, 3 / 2), Point(3 / 2 + 1, 3 / 2 + 1))),
+            options.mapSize,
+            Snake(Point(cp, cp), arrayListOf(Point(cp + 1, cp), Point(cp + 1, cp + 1))),
             Apple(Point(0, 0)),
             PlayStatus.NOT_STARTED,
     )
@@ -28,7 +33,8 @@ fun SnakelinModel.resetGame(): GameState {
 
 @Serializable
 data class SnakelinOptions(
-        val gameSpeed: Int = 400,
+        var gameSpeed: Int = 400,
+        var mapSize: Int = 3,
 )
 
 fun SnakelinModel.saveOptions() {
