@@ -9,6 +9,7 @@ import com.snakelin.model.SnakelinModel
 import com.snakelin.model.resetGame
 import com.snakelin.model.saveGame
 import javafx.scene.canvas.Canvas
+import javafx.scene.control.Label
 import javafx.scene.input.KeyEvent
 import javafx.scene.text.Text
 import tornadofx.*
@@ -21,15 +22,15 @@ class GameView : View("Snakelin") {
     override val root = borderpane {
         top = hbox {
             paddingAll = 20.0
-            text("Score: ")
-            text(SnakelinModel.currentGame.score.toString()) {
+            label("Score: ")
+            label(SnakelinModel.currentGame.score.toString()) {
                 id = "score"
             }
         }
         center = stackpane {
             add(gameCanvas)
 
-            text("Press Space to start!") {
+            label("Press Space to start!") {
                 id = "gameMessage"
             }
 
@@ -41,8 +42,8 @@ class GameView : View("Snakelin") {
         }
     }
 
-    val userText = root.lookup("#gameMessage") as Text
-    val scoreText = root.lookup("#score") as Text
+    val userText = root.lookup("#gameMessage") as Label
+    val scoreText = root.lookup("#score") as Label
 
     override fun onDock() {
         if (SnakelinModel.currentGame.status.isFinished()) {

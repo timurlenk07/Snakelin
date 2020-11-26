@@ -7,7 +7,11 @@ import tornadofx.*
 class HomeView : View("Snakelin Home") {
     override val root = borderpane {
         center = vbox(20, Pos.CENTER) {
-            label("Snakelin")
+            label("Snakelin") {
+                style(append = true) {
+                    fontSize = 36.px
+                }
+            }
             button("Play") {
                 action {
                     this@HomeView.replaceWith(GameView::class)

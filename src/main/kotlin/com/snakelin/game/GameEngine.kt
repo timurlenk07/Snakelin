@@ -62,7 +62,7 @@ fun GameState.drawOnCanvas(c: Canvas) {
     val gridSizeY = c.height / mapSize
 
     val gc = c.graphicsContext2D
-    gc.fill = Color.AQUAMARINE
+    gc.fill = Color.BLANCHEDALMOND
     gc.fillRect(0.0, 0.0, c.width, c.height)
 
     // Apple
@@ -70,7 +70,7 @@ fun GameState.drawOnCanvas(c: Canvas) {
     gc.fillOval(apple.pos.x * gridSizeX, apple.pos.y * gridSizeY, gridSizeX, gridSizeY)
 
     // Player
-    gc.fill = Color.GREEN
+    gc.fill = Color.CHOCOLATE
     for (segment in player.body) {
         gc.fillOval(segment.x * gridSizeX, segment.y * gridSizeY, gridSizeX, gridSizeY)
     }

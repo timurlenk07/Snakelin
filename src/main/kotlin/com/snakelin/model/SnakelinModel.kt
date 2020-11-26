@@ -34,7 +34,7 @@ fun SnakelinModel.resetGame(): GameState {
 @Serializable
 data class SnakelinOptions(
         var gameSpeed: Int = 400,
-        var mapSize: Int = 3,
+        var mapSize: Int = 9,
 )
 
 fun SnakelinModel.saveOptions() {

@@ -1,11 +1,12 @@
 package com.snakelin.view.popup
 
+import com.snakelin.Styles
 import tornadofx.*
 
 class AskForNamePopup(val minLength: Int) : View("Enter your name") {
     var name = ""
     override val root = vbox {
-        text("Enter your name (min. 3 characters): ")
+        label("Enter your name (min. 3 characters): ") { addClass(Styles.smallLabel) }
         textfield {
             action {
                 name = this.text

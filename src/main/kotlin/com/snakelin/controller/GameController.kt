@@ -53,21 +53,23 @@ class GameController : Controller() {
                 delay(SnakelinModel.options.gameSpeed.toLong())
                 val newState = GameEngine.step()
                 SnakelinModel.currentGame.drawOnCanvas(view.gameCanvas)
-                view.scoreText.text = SnakelinModel.currentGame.score.toString()
-                when (newState) {
-                    PlayStatus.GAME_OVER -> {
-                        view.userText.text = "Game Over!"
+                withContext(Dispatchers.JavaFx) {
+                    view.scoreText.text = SnakelinModel.currentGame.score.toString()
+                    when (newState) {
+                        PlayStatus.GAME_OVER -> {
+                            view.userText.text = "Game Over!"
+                        }
+                        PlayStatus.WIN -> {
+                            view.userText.text = "You won!"
+                        }
+                        else -> Unit
                     }
-                    PlayStatus.WIN -> {
-                        view.userText.text = "You won!"
-                    }
-                    else -> Unit
                 }
                 if (SnakelinModel.currentGame.status.isFinished()) {
-                    view.userText.isVisible = true
                     val name = withContext(Dispatchers.JavaFx) {
+                        view.userText.isVisible = true
                         val popup = AskForNamePopup(3)
-                        popup.openWindow(modality = Modality.WINDOW_MODAL, block = true)
+                        popup.openWindow(modality = Modality.WINDOW_MODAL, block = true)?.centerOnScreen()
                         popup.name
                     }
                     SnakelinModel.highScores.add(Score(SnakelinModel.currentGame.score, name))
