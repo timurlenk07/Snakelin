@@ -31,7 +31,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.1.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
-    testImplementation(kotlin("test-junit"))
+    testImplementation(kotlin("test-junit5"))
 }
 
 tasks {
@@ -41,4 +41,8 @@ tasks {
     compileTestKotlin {
         kotlinOptions.jvmTarget = "11"
     }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

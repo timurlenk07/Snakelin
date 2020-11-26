@@ -23,7 +23,7 @@ class Styles : Stylesheet() {
             fontSize = 14.px
         }
         smallButton {
-            padding = box(0.px)
+            padding = box(5.px)
             fontFamily = defaultFont.family //"Courier New", Courier, monospace
             fontSize = 14.px
         }

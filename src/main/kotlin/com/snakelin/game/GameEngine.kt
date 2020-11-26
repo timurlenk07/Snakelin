@@ -8,7 +8,7 @@ object GameEngine {
     val state: GameState get() = SnakelinModel.currentGame
 
     fun step(): PlayStatus = state.step()
-    private fun GameState.step(): PlayStatus {
+    fun GameState.step(): PlayStatus {
         // Move head
         val oldHead = player.head
         player.head += player.speed
@@ -62,7 +62,7 @@ fun GameState.drawOnCanvas(c: Canvas) {
     val gridSizeY = c.height / mapSize
 
     val gc = c.graphicsContext2D
-    gc.fill = Color.BLANCHEDALMOND
+    gc.fill = Color.ORANGE
     gc.fillRect(0.0, 0.0, c.width, c.height)
 
     // Apple
@@ -70,7 +70,7 @@ fun GameState.drawOnCanvas(c: Canvas) {
     gc.fillOval(apple.pos.x * gridSizeX, apple.pos.y * gridSizeY, gridSizeX, gridSizeY)
 
     // Player
-    gc.fill = Color.CHOCOLATE
+    gc.fill = Color.FORESTGREEN
     for (segment in player.body) {
         gc.fillOval(segment.x * gridSizeX, segment.y * gridSizeY, gridSizeX, gridSizeY)
     }

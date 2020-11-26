@@ -36,7 +36,7 @@ class HomeView : View("Snakelin Home") {
                 action { this@HomeView.replaceWith(AboutView::class) }
                 addClass(Styles.smallButton)
             }
-            right = label("v.0.1.0 (alpha)") {
+            right = label("v.1.0.0 (beta)") {
                 addClass(Styles.smallLabel)
             }
         }
